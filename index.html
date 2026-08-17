@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>tracku</title>
-  <link rel="icon" type="image/x-icon" href="tracku logo.png" />
+  <link rel="icon" type="image/x-icon" href="tracku logo.png"/>
   <style>
     * {
       margin: 0;
@@ -623,14 +623,14 @@
     }
 
     /* ---------- Projects (sidebar) ---------- */
-    .projects-section {
+    .projects-section, .notes-section, .timelines-section {
       margin-top: 14px;
       display: flex;
       flex-direction: column;
       gap: 2px;
     }
 
-    .projects-head {
+    .projects-head, .notes-head, .timelines-head {
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -642,7 +642,7 @@
       letter-spacing: 0.03em;
     }
 
-    .proj-add-btn {
+    .proj-add-btn, .notes-add-btn, .timelines-add-btn {
       background: none;
       border: none;
       color: var(--text-muted);
@@ -1305,6 +1305,31 @@
         </div>
         <div class="project-list" id="projectList"></div>
       </div>
+
+      <div class="notes-section" style="margin-left:7.5px;font-weight: 300;color:#d1d1d1;padding-bottom: 20px;">_______________________________</div>
+      <div class="notes-section" style="margin-left:7.5px;font-weight: 600;color:#808080">Future releases: (placeholder)</div>
+
+      <div class="notes-section">
+        <div class="notes-head">
+          <span>My notes</span>
+          <button class="notes-add-btn" id="addNotesBtn" title="Add Notes">
+            +
+          </button>
+        </div>
+        <div class="project-list" id="projectList"></div>
+      </div>
+
+      <div class="timelines-section">
+        <div class="timelines-head">
+          <span>My timelines</span>
+          <button class="timelines-add-btn" id="addTimelinesBtn" title="Add Timelines">
+            +
+          </button>
+        </div>
+        <div class="project-list" id="projectList"></div>
+      </div>
+
+
     </aside>
 
     <!-- Main content -->
