@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>tracku</title>
-  <link rel="icon" type="image/x-icon" href="tracku logo.png"/>
+  <link rel="icon" type="image/x-icon" href="tracku logo.png" />
   <style>
     * {
       margin: 0;
@@ -25,10 +25,10 @@
       --card-bg: #ffffff;
       --card-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
       --not-started: #808080;
-      --in-progress: #eb8909;
-      --completed: #299438;
+      --in-progress: #e08020;
+      --completed: #3eb94e;
       --blockers: #dc4c3e;
-      --next-steps: #6b5ecb;
+      --next-steps: #766dc2;
     }
 
     body {
@@ -311,8 +311,6 @@
       font-size: 14px;
     }
 
-
-
     .status-dot {
       width: 10px;
       height: 10px;
@@ -407,6 +405,15 @@
       line-height: 1.35;
       word-break: break-word;
     }
+/* 
+    .task-owner {
+      font-size: 12px;
+      font-style: italic;
+      font-weight: 500;
+      color: #808080;
+      line-height: 1.35;
+      word-break: break-word;
+    } */
 
     .task-card.done .task-title {
       text-decoration: line-through;
@@ -448,9 +455,11 @@
 
     .task-notes {
       font-size: 12px;
+      width: 11rem;
       color: var(--text-muted);
       margin-top: 4px;
       line-height: 1.3;
+      overflow-wrap: break-word;
     }
 
     .notes-toggle {
@@ -623,14 +632,18 @@
     }
 
     /* ---------- Projects (sidebar) ---------- */
-    .projects-section, .notes-section, .timelines-section {
+    .projects-section,
+    .notes-section,
+    .timelines-section {
       margin-top: 14px;
       display: flex;
       flex-direction: column;
       gap: 2px;
     }
 
-    .projects-head, .notes-head, .timelines-head {
+    .projects-head,
+    .notes-head,
+    .timelines-head {
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -642,7 +655,9 @@
       letter-spacing: 0.03em;
     }
 
-    .proj-add-btn, .notes-add-btn, .timelines-add-btn {
+    .proj-add-btn,
+    .notes-add-btn,
+    .timelines-add-btn {
       background: none;
       border: none;
       color: var(--text-muted);
@@ -1009,8 +1024,8 @@
       background: #fff;
       border-radius: 12px;
       padding: 24px;
-      width: 460px;
-      max-width: 90vw;
+      width: 600px;
+      max-width: 100vw;
       max-height: 90vh;
       overflow-y: auto;
       display: flex;
@@ -1235,6 +1250,122 @@
       display: none;
     }
 
+    /* ---------- Sidebar sections (Notes / Timelines) ---------- */
+    .section-divider { height: 1px; background: var(--border); margin: 12px 8px 6px; }
+    .section-link { cursor: pointer; border-radius: 6px; }
+    .section-link:hover { background: var(--hover); }
+    .section-link.active { color: var(--red); }
+    .notes-add-btn:hover,
+    .timelines-add-btn:hover { background: var(--hover); color: var(--red); }
+
+    /* ---------- Notes (Google Keep) ---------- */
+    #view-notes .view-header { justify-content: space-between; }
+    .notes-grid {
+      flex: 1; overflow-y: auto; padding: 4px 4px 24px;
+      column-width: 240px; column-gap: 14px;
+    }
+    .note-card {
+      break-inside: avoid; display: inline-block; width: 100%;
+      margin-bottom: 14px; border: 1px solid rgba(0, 0, 0, 0.09);
+      border-radius: 12px; padding: 14px 14px 10px; cursor: pointer;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06); transition: box-shadow 0.12s;
+      position: relative;
+    }
+    .note-card:hover { box-shadow: 0 4px 12px rgba(0, 0, 0, 0.14); }
+    .note-title { font-weight: 700; font-size: 15px; margin-bottom: 6px; word-break: break-word; padding-right: 22px; }
+    .note-body { font-size: 13px; line-height: 1.45; white-space: pre-wrap; word-break: break-word; color: #3c3c3c; }
+    .note-pin {
+      position: absolute; top: 8px; right: 8px; border: none; background: none;
+      cursor: pointer; font-size: 14px; opacity: 0; transition: opacity 0.12s;
+      border-radius: 50%; width: 26px; height: 26px; line-height: 1;
+    }
+    .note-card:hover .note-pin,
+    .note-card.pinned .note-pin { opacity: 1; }
+    .note-actions { display: flex; gap: 4px; margin-top: 8px; opacity: 0; transition: opacity 0.12s; }
+    .note-card:hover .note-actions { opacity: 1; }
+    .note-actions button {
+      border: none; background: none; cursor: pointer; color: #5f6368;
+      border-radius: 6px; padding: 4px; display: inline-flex;
+    }
+    .note-actions button:hover { background: rgba(0, 0, 0, 0.08); }
+    .note-actions button svg { display: block; }
+    .note-empty,
+    .tl-empty { color: var(--text-muted); font-style: italic; padding: 48px 12px; text-align: center; line-height: 1.6; }
+
+    .note-link {
+      display: inline-flex; align-items: center; gap: 4px; margin-top: 10px;
+      font-size: 11px; font-weight: 600; color: #444;
+      background: rgba(0, 0, 0, 0.06); border-radius: 999px; padding: 3px 9px;
+      max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    }
+    .note-link:hover { background: rgba(0, 0, 0, 0.12); }
+
+    /* Google Keep "Take a note…" bar */
+    .take-note {
+      max-width: 600px; width: 100%; margin: 0 auto 22px;
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+      background: #fff; border: 1px solid var(--border); border-radius: 10px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); padding: 12px 14px; cursor: text; flex: none;
+    }
+    .take-note:hover { box-shadow: 0 2px 10px rgba(0, 0, 0, 0.14); }
+    .take-note-text { color: var(--text-muted); font-weight: 500; font-size: 15px; }
+    .take-note-icons { display: flex; gap: 4px; }
+    .take-note-icons button {
+      border: none; background: none; color: #5f6368; cursor: pointer;
+      padding: 7px; border-radius: 50%; display: inline-flex;
+    }
+    .take-note-icons button:hover { background: rgba(0, 0, 0, 0.07); }
+    .take-note-icons svg { display: block; }
+
+    /* ---------- Timelines (Gantt) ---------- */
+    #view-timelines .view-header { justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+    .tl-title-wrap { display: flex; align-items: center; gap: 12px; }
+    .timeline-body { flex: 1; display: flex; min-height: 0; }
+    .gantt-wrap { flex: 1; display: flex; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; min-height: 0; }
+    .gantt-left { flex: none; width: 190px; border-right: 1px solid var(--border); overflow: hidden; background: var(--sidebar-bg); }
+    .gantt-corner {
+      height: 48px; display: flex; align-items: center; padding: 0 12px;
+      font-size: 11px; font-weight: 700; color: var(--text-muted);
+      text-transform: uppercase; letter-spacing: 0.03em;
+      border-bottom: 1px solid var(--border); box-sizing: border-box;
+    }
+    .gantt-rowlabel {
+      height: 40px; display: flex; align-items: center; padding: 0 12px;
+      font-size: 13px; border-bottom: 1px solid var(--border);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      cursor: pointer; box-sizing: border-box;
+    }
+    .gantt-rowlabel:hover { background: var(--hover); }
+    .gantt-right { flex: 1; overflow: auto; }
+    .gantt-canvas { position: relative; }
+    .gantt-headwrap { position: sticky; top: 0; z-index: 3; background: #fff; }
+    .gantt-months { display: flex; height: 24px; }
+    .gantt-month {
+      border-right: 1px solid var(--border); border-bottom: 1px solid var(--border);
+      font-size: 11px; font-weight: 700; color: var(--text-muted);
+      display: flex; align-items: center; padding: 0 8px; box-sizing: border-box;
+      white-space: nowrap; overflow: hidden; flex: none;
+    }
+    .gantt-days { display: flex; height: 24px; }
+    .gantt-day {
+      border-right: 1px solid var(--border); border-bottom: 1px solid var(--border);
+      font-size: 9px; color: var(--text-muted); display: flex; gap: 3px;
+      align-items: center; justify-content: center; box-sizing: border-box; flex: none;
+    }
+    .gantt-day.weekend { background: #faf7f4; }
+    .gantt-day.today { background: #fff0ed; color: var(--red); font-weight: 700; }
+    .gantt-rows { position: relative; }
+    .gantt-gridrow { height: 40px; border-bottom: 1px solid var(--border); box-sizing: border-box; }
+    .gantt-bar {
+      position: absolute; height: 26px; border-radius: 6px; display: flex;
+      align-items: center; padding: 0 8px; color: #fff; font-size: 12px;
+      font-weight: 600; cursor: pointer; overflow: hidden; white-space: nowrap;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.22);
+    }
+    .gantt-bar .bar-progress { position: absolute; left: 0; top: 0; bottom: 0; background: rgba(255, 255, 255, 0.3); }
+    .gantt-bar .bar-label { position: relative; z-index: 1; text-shadow: 0 1px 1px rgba(0, 0, 0, 0.25); overflow: hidden; text-overflow: ellipsis; }
+    .gantt-today-line { position: absolute; top: 0; bottom: 0; width: 2px; background: var(--red); z-index: 2; }
+
     /* Scrollbars */
     ::-webkit-scrollbar {
       height: 10px;
@@ -1289,6 +1420,11 @@
           <span>Status Tracking</span>
           <span class="nav-count" id="countStatus">0</span>
         </button>
+        <button class="nav-item" data-view="priority">
+          <span class="nav-icon">🚩</span>
+          <span>Priority Tracking</span>
+          <span class="nav-count" id="countPriority">0</span>
+        </button>
         <button class="nav-item" data-view="reporting">
           <span class="nav-icon">📈</span>
           <span>Reporting</span>
@@ -1306,30 +1442,26 @@
         <div class="project-list" id="projectList"></div>
       </div>
 
-      <div class="notes-section" style="margin-left:7.5px;font-weight: 300;color:#d1d1d1;padding-bottom: 20px;">_______________________________</div>
-      <div class="notes-section" style="margin-left:7.5px;font-weight: 600;color:#808080">Future releases: (placeholder)</div>
+      <div class="section-divider"></div>
 
       <div class="notes-section">
-        <div class="notes-head">
+        <div class="notes-head section-link" id="notesNav">
           <span>My notes</span>
           <button class="notes-add-btn" id="addNotesBtn" title="Add Notes">
             +
           </button>
         </div>
-        <div class="project-list" id="projectList"></div>
       </div>
 
       <div class="timelines-section">
-        <div class="timelines-head">
+        <div class="timelines-head section-link" id="timelinesNav">
           <span>My timelines</span>
-          <button class="timelines-add-btn" id="addTimelinesBtn" title="Add Timelines">
+          <button class="timelines-add-btn" id="addTimelinesBtn" title="Add timeline">
             +
           </button>
         </div>
-        <div class="project-list" id="projectList"></div>
+        <div class="project-list" id="timelineList"></div>
       </div>
-
-
     </aside>
 
     <!-- Main content -->
@@ -1354,6 +1486,14 @@
           <h1>Status Tracking</h1>
         </header>
         <div class="status-columns" id="statusColumns"></div>
+      </section>
+
+      <!-- Priority view -->
+      <section class="view hidden" id="view-priority">
+        <header class="view-header">
+          <h1>Priority Tracking</h1>
+        </header>
+        <div class="status-columns" id="priorityColumns"></div>
       </section>
 
       <!-- Project view -->
@@ -1412,6 +1552,34 @@
           </div>
         </div>
       </section>
+
+      <!-- Notes view (Google Keep style) -->
+      <section class="view hidden" id="view-notes">
+        <header class="view-header">
+          <h1>Notes</h1>
+        </header>
+        <div class="take-note" id="takeNote">
+          <span class="take-note-text">Take a note…</span>
+          <div class="take-note-icons">
+            <button id="takeNoteCheck" title="New note" tabindex="-1"></button>
+            <button id="takeNotePen" title="New note" tabindex="-1"></button>
+            <button id="takeNoteImg" title="New note" tabindex="-1"></button>
+          </div>
+        </div>
+        <div class="notes-grid" id="notesGrid"></div>
+      </section>
+
+      <!-- Timelines view (Gantt) -->
+      <section class="view hidden" id="view-timelines">
+        <header class="view-header">
+          <div class="tl-title-wrap">
+            <h1 id="timelineTitle">Timelines</h1>
+            <span id="timelineProjectPill"></span>
+          </div>
+          <div class="report-actions" id="timelineActions"></div>
+        </header>
+        <div id="timelineBody" class="timeline-body"></div>
+      </section>
     </main>
   </div>
 
@@ -1422,10 +1590,15 @@
       <label>Task name
         <input type="text" id="taskName" placeholder="e.g. Finish design doc" autocomplete="off" />
       </label>
-      <label>Project
-        <select id="taskProject"></select>
-      </label>
       <div class="modal-row">
+        <label>Project
+          <select id="taskProject"></select>
+        </label>
+        <!-- <label>Owner
+          <input type="text" id="taskOwner" />
+        </label> -->
+        </div>
+        <div class="modal-row">
         <label>Due date
           <input type="date" id="taskDate" />
         </label>
@@ -1444,7 +1617,8 @@
             <option value="not-started">Not started</option>
             <option value="in-progress">In progress</option>
             <option value="completed">Completed</option>
-            <option value="blockers" id="blockersCard" style="background-color: #d5aeaa !important;">Blockers / Risk
+            <option value="blockers" id="blockersCard" style="background-color: #d5aeaa !important">
+              Blockers / Risk
             </option>
             <option value="next-steps">Next steps</option>
           </select>
@@ -1490,6 +1664,81 @@
     </div>
   </div>
 
+  <!-- Note modal -->
+  <div class="modal-overlay hidden" id="noteModalOverlay">
+    <div class="modal" style="width: 480px">
+      <h2 id="noteModalTitle">Add note</h2>
+      <label>Title
+        <input type="text" id="noteTitleInput" placeholder="Title" autocomplete="off" />
+      </label>
+      <label>Note
+        <textarea id="noteBodyInput" rows="5" placeholder="Take a note…"></textarea>
+      </label>
+      <label>Link to task (optional)
+        <select id="noteTaskSelect"></select>
+      </label>
+      <label>Color</label>
+      <div class="swatches" id="noteSwatches"></div>
+      <label style="flex-direction: row; align-items: center; gap: 8px; font-weight: 500">
+        <input type="checkbox" id="notePinInput" style="width: auto" /> Pin to top
+      </label>
+      <div class="modal-actions">
+        <button class="btn-danger hidden" id="noteDelete">Delete</button>
+        <span style="flex: 1"></span>
+        <button class="btn-secondary" id="noteCancel">Cancel</button>
+        <button class="btn-primary" id="noteSave">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Timeline modal -->
+  <div class="modal-overlay hidden" id="timelineModalOverlay">
+    <div class="modal" style="width: 460px">
+      <h2 id="timelineModalTitle">Add timeline</h2>
+      <label>Timeline name
+        <input type="text" id="timelineNameInput" placeholder="e.g. Q3 Delivery" autocomplete="off" />
+      </label>
+      <label>Project
+        <select id="timelineProjectSelect"></select>
+      </label>
+      <div class="modal-actions">
+        <button class="btn-danger hidden" id="timelineDelete">Delete timeline</button>
+        <span style="flex: 1"></span>
+        <button class="btn-secondary" id="timelineCancel">Cancel</button>
+        <button class="btn-primary" id="timelineSave">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Gantt bar modal -->
+  <div class="modal-overlay hidden" id="barModalOverlay">
+    <div class="modal" style="width: 460px">
+      <h2 id="barModalTitle">Add task</h2>
+      <label>Task / phase
+        <input type="text" id="barLabelInput" placeholder="e.g. Design phase" autocomplete="off" />
+      </label>
+      <div class="modal-row">
+        <label>Start
+          <input type="date" id="barStartInput" />
+        </label>
+        <label>End
+          <input type="date" id="barEndInput" />
+        </label>
+      </div>
+      <label>Progress: <span id="barProgressVal">0</span>%
+        <input type="range" id="barProgressInput" min="0" max="100" step="5" value="0" />
+      </label>
+      <label>Color</label>
+      <div class="swatches" id="barSwatches"></div>
+      <div class="modal-actions">
+        <button class="btn-danger hidden" id="barDelete">Delete</button>
+        <span style="flex: 1"></span>
+        <button class="btn-secondary" id="barCancel">Cancel</button>
+        <button class="btn-primary" id="barSave">Save</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Completed toast -->
   <div class="toast hidden" id="toast">
     <span class="toast-check">✓</span>
@@ -1505,14 +1754,21 @@
 
   <script>
     /* ============================================================
-   Task Tracker  —  Todoist-style
-   Two views: Upcoming (day-wise) & Status Tracking (by category)
-   Data persisted in localStorage.
-   ============================================================ */
+ Task Tracker  —  Todoist-style
+ Two views: Upcoming (day-wise) & Status Tracking (by category)
+ Data persisted in localStorage.
+ ============================================================ */
 
     const STORAGE_KEY = "taskTracker.tasks.v1";
     const LOG_KEY = "taskTracker.log.v1";
     const PROJECTS_KEY = "taskTracker.projects.v1";
+    const NOTES_KEY = "taskTracker.notes.v1";
+    const TIMELINES_KEY = "taskTracker.timelines.v1";
+
+    // Google Keep-style pastel note colors.
+    const NOTE_COLORS = ["#ffffff", "#f8bbd0", "#fdd8a5", "#fff3a3", "#d7f0b8", "#b3ebe0", "#c5e3f7", "#d0d4f7", "#e5c9f2", "#f2d3c0"];
+    // Saturated colors for Gantt bars.
+    const BAR_COLORS = ["#6b5ecb", "#dc4c3e", "#e08020", "#3eb94e", "#2563eb", "#0891b2", "#db2777", "#65a30d"];
 
     // Project colours: a saturated dot + a matching pastel pill (bg/fg).
     const PROJECT_PALETTE = [
@@ -1557,10 +1813,15 @@
       '<circle cx="5" cy="12" r="1.4"/><circle cx="12" cy="12" r="1.4"/><circle cx="19" cy="12" r="1.4"/>';
     const _repeat =
       '<polyline points="17 1.5 21 5.5 17 9.5"/><path d="M3 11.5v-1a4 4 0 0 1 4-4h14"/><polyline points="7 22.5 3 18.5 7 14.5"/><path d="M21 12.5v1a4 4 0 0 1-4 4H3"/>';
+    const _flag = '<path d="M5 21V4"/><path d="M5 4h11l-2 4 2 4H5"/>';
+    const _checkSquare = '<rect x="3" y="3" width="18" height="18" rx="2.5"/><polyline points="8 12 11 15 16 9"/>';
+    const _pencil = '<path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/>';
+    const _image = '<rect x="3" y="3" width="18" height="18" rx="2.5"/><circle cx="8.5" cy="8.5" r="1.6"/><path d="M21 15l-5-5L5 21"/>';
     const ICONS = {
       navCalendar: ICN(_cal, 18),
       navBoard: ICN(_board, 18),
       navChart: ICN(_chart, 18),
+      navFlag: ICN(_flag, 18),
       archive: ICN(_archive, 16),
       dots: ICN(_dots, 18),
       trash: ICN(_trash, 16),
@@ -1570,6 +1831,10 @@
       calSmall: ICN(_cal, 13),
       download: ICN(_download, 15),
       repeat: ICN(_repeat, 13),
+      checkSquare: ICN(_checkSquare, 18),
+      pencil: ICN(_pencil, 18),
+      image: ICN(_image, 18),
+      link: ICN('<path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/>', 12),
     };
 
     const STATUSES = [
@@ -1697,6 +1962,9 @@
     let selectedColorIdx = 0; // chosen swatch in the project modal
     let currentView = "upcoming";
     let currentProjectId = null;
+    let currentTimelineId = null;
+    let notes = loadNotes();
+    let timelines = loadTimelines();
     let orderSeq = 0; // monotonic counter for manual within-priority ordering
     const reportFilters = { month: "", tag: "", action: "" };
 
@@ -1813,6 +2081,7 @@
         time: new Date().toISOString(),
         taskId: t.id,
         title: t.title,
+        // owner: t.owner,
         project: projectNameOf(t),
         priority: t.priority || "p4",
         date: t.date || "",
@@ -1837,7 +2106,7 @@
         d.setDate(d.getDate() + n);
         return toISODate(d);
       };
-      return [  ];
+      return [];
     }
 
     /* ---------- Helpers ---------- */
@@ -1861,9 +2130,10 @@
       return `${y}-${m}-${day}`;
     }
     function fromISODate(s) {
-      if (!s) return null;
-      const [y, m, d] = s.split("-").map(Number);
-      return new Date(y, m - 1, d);
+      if (!s || typeof s !== "string") return null;
+      const parts = s.split("-").map(Number);
+      if (parts.length !== 3 || parts.some((n) => isNaN(n))) return null;
+      return new Date(parts[0], parts[1] - 1, parts[2]);
     }
     function dayLabel(d) {
       const today = startOfDay(new Date());
@@ -1914,8 +2184,8 @@
     }
 
     /* ============================================================
-   Rendering
-   ============================================================ */
+ Rendering
+ ============================================================ */
     const dayColumnsEl = document.getElementById("dayColumns");
     const statusColumnsEl = document.getElementById("statusColumns");
     const projectColumnsEl = document.getElementById("projectColumns");
@@ -1923,14 +2193,32 @@
     const DAYS_VISIBLE = 5;
 
     function render() {
-      sweepCompleted();
-      renderUpcoming();
-      renderStatus();
-      renderProjects();
-      if (currentView === "project") renderProjectView();
-      renderReporting();
-      renderCounts();
+      // Each phase is isolated so a single malformed record can't blank the
+      // whole app or stop the counts/other boards from rendering.
+      const step = (name, fn) => {
+        try { fn(); } catch (e) { console.error("[tracku render] " + name + " failed:", e); }
+      };
+      step("sweep", sweepCompleted);
+      step("upcoming", renderUpcoming);
+      step("status", renderStatus);
+      step("priority", renderPriority);
+      step("projects", renderProjects);
+      step("timelinesSidebar", renderTimelinesSidebar);
+      if (currentView === "project") step("projectView", renderProjectView);
+      else if (currentView === "notes") step("notes", renderNotes);
+      else if (currentView === "timelines") step("timelineView", renderTimelineView);
+      step("reporting", renderReporting);
+      step("counts", renderCounts);
       save();
+    }
+
+    // Append a task card, skipping (not crashing on) any single bad record.
+    function appendCard(list, t, showDate) {
+      try {
+        list.appendChild(taskCard(t, showDate));
+      } catch (e) {
+        console.warn("[tracku] skipped a task that failed to render:", t && t.id, e);
+      }
     }
 
     function renderCounts() {
@@ -1939,6 +2227,9 @@
         (t) => t.status !== "completed",
       ).length;
       document.getElementById("countStatus").textContent = active.length;
+      document.getElementById("countPriority").textContent = active.filter(
+        (t) => t.status !== "completed",
+      ).length;
       document.getElementById("countReporting").textContent = log.length;
     }
 
@@ -1989,7 +2280,7 @@
 
           const list = document.createElement("div");
           list.className = "task-list";
-          overdue.forEach((t) => list.appendChild(taskCard(t, true))); // show original due date
+          overdue.forEach((t) => appendCard(list, t, true)); // show original due date
           col.appendChild(list);
 
           dayColumnsEl.appendChild(col);
@@ -2028,7 +2319,7 @@
         const list = document.createElement("div");
         list.className = "task-list";
         list.dataset.date = isoDate;
-        dayTasks.forEach((t) => list.appendChild(taskCard(t)));
+        dayTasks.forEach((t) => appendCard(list, t, false));
         enableDrop(list, { date: isoDate });
         col.appendChild(list);
 
@@ -2079,7 +2370,7 @@
           hint.textContent = "Drop tasks here";
           list.appendChild(hint);
         }
-        colTasks.forEach((t) => list.appendChild(taskCard(t, true)));
+        colTasks.forEach((t) => appendCard(list, t, true));
         enableDrop(list, { status: st.key });
         col.appendChild(list);
 
@@ -2097,6 +2388,63 @@
 
     function renderStatus() {
       buildStatusBoard(statusColumnsEl, () => true, {});
+    }
+
+    /* ---------- Priority board ---------- */
+    const PRIORITIES = [
+      { key: "p1", label: "High", color: PRIORITY_COLOR.p1 },
+      { key: "p2", label: "Medium", color: PRIORITY_COLOR.p2 },
+      { key: "p3", label: "Low", color: PRIORITY_COLOR.p3 },
+      { key: "p4", label: "None", color: PRIORITY_COLOR.p4 },
+    ];
+    function renderPriority() {
+      const container = document.getElementById("priorityColumns");
+      if (!container) return;
+      container.innerHTML = "";
+      PRIORITIES.forEach((pr) => {
+        const colTasks = tasks
+          .filter(
+            (t) =>
+              !t.archived &&
+              t.status !== "completed" &&
+              (t.priority || "p4") === pr.key,
+          )
+          .sort((a, b) => a.order - b.order);
+
+        const col = document.createElement("div");
+        col.className = "status-column";
+        col.dataset.priority = pr.key;
+
+        const header = document.createElement("div");
+        header.className = "status-column-header";
+        header.innerHTML = `
+          <span class="status-dot" style="background:${pr.color}"></span>
+          <span>${pr.label}</span>
+          <span class="status-count">${colTasks.length}</span>
+        `;
+        col.appendChild(header);
+
+        const list = document.createElement("div");
+        list.className = "task-list";
+        list.dataset.priority = pr.key;
+        if (colTasks.length === 0) {
+          const hint = document.createElement("div");
+          hint.className = "empty-hint";
+          hint.textContent = "Drop tasks here";
+          list.appendChild(hint);
+        }
+        colTasks.forEach((t) => appendCard(list, t, true));
+        enableDrop(list, { priority: pr.key });
+        col.appendChild(list);
+
+        const add = document.createElement("button");
+        add.className = "add-task-inline";
+        add.innerHTML = `<span class="plus-icon">+</span> Add task`;
+        add.addEventListener("click", () => openModal(null, { priority: pr.key }));
+        col.appendChild(add);
+
+        container.appendChild(col);
+      });
     }
 
     function renderProjectView() {
@@ -2249,6 +2597,7 @@
           html += `<tr>
         <td class="log-time">${fmtDateTime(e.time)}</td>
         <td>${escapeHtml(e.title)}</td>
+        <!-- <td>${escapeHtml(e.owner)}</td> -->
         <td>${evProject(e) ? projectPillName(evProject(e)) : "—"}</td>
         <td><span class="log-action-pill" style="background:${actionColor(e.action)}">${actionLabel(e.action)}</span></td>
         <td>${escapeHtml(e.detail || (e.action === "created" ? statusLabel(e.toStatus) : ""))}</td>
@@ -2327,6 +2676,7 @@
         "Time",
         "Task",
         "Project",
+        // "Owner",
         "Action",
         "From status",
         "To status",
@@ -2342,6 +2692,7 @@
           toISODate(d),
           `${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}`,
           e.title,
+          // e.owner,
           evProject(e),
           actionLabel(e.action),
           statusLabel(e.fromStatus),
@@ -2360,6 +2711,7 @@
       const header = [
         "Task",
         "Project",
+        // "Owner",
         "Status",
         "Priority",
         "Due date",
@@ -2368,6 +2720,7 @@
       ];
       const data = tasks.map((t) => [
         t.title,
+        // t.owner,
         projectNameOf(t),
         statusLabel(t.status),
         PRIORITY_LABEL[t.priority] || "None",
@@ -2404,6 +2757,11 @@
       title.innerHTML = projectPill(t) + escapeHtml(t.title);
       body.appendChild(title);
 
+      // const owner = document.createElement("div");
+      // owner.className = "task-owner";
+      // owner.innerHTML = escapeHtml(t.owner);
+      // body.appendChild(owner);
+
       if (t.notes) {
         const notes = document.createElement("div");
         notes.className = "task-notes";
@@ -2434,15 +2792,17 @@
       meta.className = "task-meta";
       if (showDate && t.date) {
         const d = fromISODate(t.date);
-        const badge = document.createElement("span");
-        badge.className = "task-badge";
-        badge.innerHTML =
-          ICONS.calSmall +
-          " " +
-          d.getDate() +
-          " " +
-          MONTHS[d.getMonth()].slice(0, 3);
-        meta.appendChild(badge);
+        if (d) {
+          const badge = document.createElement("span");
+          badge.className = "task-badge";
+          badge.innerHTML =
+            ICONS.calSmall +
+            " " +
+            d.getDate() +
+            " " +
+            MONTHS[d.getMonth()].slice(0, 3);
+          meta.appendChild(badge);
+        }
       }
       if (!showDate) {
         const st = STATUS_MAP[t.status];
@@ -2504,8 +2864,8 @@
     }
 
     /* ============================================================
-   Actions
-   ============================================================ */
+ Actions
+ ============================================================ */
     function addDaysISO(n) {
       const d = startOfDay(new Date());
       d.setDate(d.getDate() + n);
@@ -2803,8 +3163,8 @@
     }
 
     /* ============================================================
-   Drag & drop
-   ============================================================ */
+ Drag & drop
+ ============================================================ */
     let draggingId = null;
 
     function enableDrag(card, id) {
@@ -2838,11 +3198,15 @@
 
         const sameColumn =
           (target.status !== undefined && t.status === target.status) ||
-          (target.date !== undefined && t.date === target.date);
+          (target.date !== undefined && t.date === target.date) ||
+          (target.priority !== undefined &&
+            (t.priority || "p4") === target.priority);
 
         if (!sameColumn) {
           if (target.status !== undefined) moveStatus(t.id, target.status);
           else if (target.date !== undefined) reschedule(t.id, target.date);
+          else if (target.priority !== undefined)
+            setPriority(t.id, target.priority);
           return;
         }
         // Same column → reorder. Priority-first sort keeps it within its priority group.
@@ -2877,12 +3241,13 @@
     }
 
     /* ============================================================
-   Modal
-   ============================================================ */
+ Modal
+ ============================================================ */
     const overlay = document.getElementById("modalOverlay");
     const f = {
       name: document.getElementById("taskName"),
       project: document.getElementById("taskProject"),
+      // owner: document.getElementById("taskOwner"),
       date: document.getElementById("taskDate"),
       priority: document.getElementById("taskPriority"),
       status: document.getElementById("taskStatus"),
@@ -2927,10 +3292,11 @@
       f.name.value = t ? t.title : "";
       populateProjectSelect(t ? t.projectId || "" : prefill.projectId || "");
       f.date.value = t ? t.date || "" : prefill.date || toISODate(new Date());
-      f.priority.value = t ? t.priority || "p4" : "p4";
+      f.priority.value = t ? t.priority || "p4" : prefill.priority || "p4";
       f.status.value = t ? t.status : prefill.status || "not-started";
       f.recur.value = t ? t.recur || "none" : "none";
       f.notes.value = t ? t.notes || "" : "";
+      // f.owner.value = t ? t.owner || "" : "";
 
       overlay.classList.remove("hidden");
       setTimeout(() => f.name.focus(), 50);
@@ -2955,6 +3321,7 @@
         status: f.status.value,
         recur: f.recur.value,
         notes: f.notes.value.trim(),
+        // owner: f.owner.value,
       };
 
       if (editingId) {
@@ -2988,8 +3355,8 @@
     }
 
     /* ============================================================
-   Wire up UI
-   ============================================================ */
+ Wire up UI
+ ============================================================ */
     document
       .getElementById("sidebarAddTask")
       .addEventListener("click", () => openModal(null));
@@ -3029,28 +3396,38 @@
       renderUpcoming();
     });
 
-    // View switching (built-in views + dynamic project views)
-    function selectView(view, projectId) {
+    // View switching (built-in views + dynamic project/timeline views)
+    function selectView(view, arg) {
       currentView = view;
-      currentProjectId = projectId || null;
+      currentProjectId = view === "project" ? arg || null : null;
+      if (view === "timelines" && arg) currentTimelineId = arg;
+
       document
         .querySelectorAll(".nav-item")
-        .forEach((b) =>
-          b.classList.toggle(
-            "active",
-            view !== "project" && b.dataset.view === view,
-          ),
-        );
+        .forEach((b) => b.classList.toggle("active", b.dataset.view === view));
+      const notesNav = document.getElementById("notesNav");
+      const timelinesNav = document.getElementById("timelinesNav");
+      if (notesNav) notesNav.classList.toggle("active", view === "notes");
+      if (timelinesNav)
+        timelinesNav.classList.toggle("active", view === "timelines");
+
       document
         .querySelectorAll(".view")
         .forEach((sec) => sec.classList.add("hidden"));
-      if (view === "project") {
-        document.getElementById("view-project").classList.remove("hidden");
-        renderProjectView();
-      } else {
-        document.getElementById("view-" + view).classList.remove("hidden");
-      }
-      renderProjects(); // refresh sidebar active highlight
+      const map = {
+        project: "view-project",
+        notes: "view-notes",
+        timelines: "view-timelines",
+      };
+      const sec = document.getElementById(map[view] || "view-" + view);
+      if (sec) sec.classList.remove("hidden");
+
+      if (view === "project") renderProjectView();
+      else if (view === "notes") renderNotes();
+      else if (view === "timelines") renderTimelineView();
+
+      renderProjects();
+      renderTimelinesSidebar();
       closeTaskMenu();
     }
 
@@ -3305,6 +3682,7 @@
       const navMap = {
         upcoming: ICONS.navCalendar,
         status: ICONS.navBoard,
+        priority: ICONS.navFlag,
         reporting: ICONS.navChart,
       };
       document.querySelectorAll(".nav-item").forEach((b) => {
@@ -3316,7 +3694,565 @@
         ICONS.download + " Export Activity Log";
       document.getElementById("exportTasks").innerHTML =
         ICONS.download + " Export Current Tasks";
+      document.getElementById("takeNoteCheck").innerHTML = ICONS.checkSquare;
+      document.getElementById("takeNotePen").innerHTML = ICONS.pencil;
+      document.getElementById("takeNoteImg").innerHTML = ICONS.image;
     })();
+
+    /* ============================================================
+       Notes (Google Keep style)
+       ============================================================ */
+    function loadNotes() {
+      try { const r = localStorage.getItem(NOTES_KEY); if (r) return JSON.parse(r); } catch (e) {}
+      return [];
+    }
+    function saveNotes() {
+      try { localStorage.setItem(NOTES_KEY, JSON.stringify(notes)); } catch (e) {}
+    }
+
+    function renderNotes() {
+      const grid = document.getElementById("notesGrid");
+      if (!grid) return;
+      grid.innerHTML = "";
+      if (!notes.length) {
+        grid.innerHTML = `<div class="note-empty">No notes yet.<br>Click “＋ Add note” to jot something down.</div>`;
+        return;
+      }
+      const sorted = notes.slice().sort(
+        (a, b) =>
+          (b.pinned ? 1 : 0) - (a.pinned ? 1 : 0) ||
+          (b.updatedAt || "").localeCompare(a.updatedAt || ""),
+      );
+      sorted.forEach((n) => grid.appendChild(noteCard(n)));
+    }
+
+    function noteCard(n) {
+      const card = document.createElement("div");
+      card.className = "note-card" + (n.pinned ? " pinned" : "");
+      card.style.background = n.color || "#ffffff";
+
+      const pin = document.createElement("button");
+      pin.className = "note-pin";
+      pin.innerHTML = n.pinned ? "📌" : "📍";
+      pin.title = n.pinned ? "Unpin" : "Pin to top";
+      pin.addEventListener("click", (e) => {
+        e.stopPropagation();
+        n.pinned = !n.pinned;
+        n.updatedAt = new Date().toISOString();
+        saveNotes();
+        renderNotes();
+      });
+      card.appendChild(pin);
+
+      if (n.title) {
+        const t = document.createElement("div");
+        t.className = "note-title";
+        t.textContent = n.title;
+        card.appendChild(t);
+      }
+      if (n.body) {
+        const b = document.createElement("div");
+        b.className = "note-body";
+        b.textContent = n.body;
+        card.appendChild(b);
+      }
+
+      if (n.taskId) {
+        const tk = tasks.find((x) => x.id === n.taskId && !x.archived);
+        if (tk) {
+          const link = document.createElement("div");
+          link.className = "note-link";
+          link.innerHTML = ICONS.link + " " + escapeHtml(tk.title);
+          link.title = "Open linked task";
+          link.addEventListener("click", (e) => {
+            e.stopPropagation();
+            openModal(tk.id);
+          });
+          card.appendChild(link);
+        }
+      }
+
+      const act = document.createElement("div");
+      act.className = "note-actions";
+      const del = document.createElement("button");
+      del.innerHTML = ICONS.trash;
+      del.title = "Delete note";
+      del.addEventListener("click", (e) => {
+        e.stopPropagation();
+        if (confirm("Delete this note?")) {
+          notes = notes.filter((x) => x.id !== n.id);
+          saveNotes();
+          renderNotes();
+        }
+      });
+      act.appendChild(del);
+      card.appendChild(act);
+
+      card.addEventListener("click", () => openNoteModal(n.id));
+      return card;
+    }
+
+    /* ---------- Note modal ---------- */
+    let editingNoteId = null;
+    let noteColorSel = "#ffffff";
+    const noteOverlay = document.getElementById("noteModalOverlay");
+
+    function populateNoteTaskSelect(selectedId) {
+      const el = document.getElementById("noteTaskSelect");
+      const opts = tasks
+        .filter((t) => !t.archived)
+        .map((t) => {
+          const proj = projectNameOf(t);
+          const lbl = (proj ? "[" + proj + "] " : "") + t.title;
+          return `<option value="${t.id}"${t.id === selectedId ? " selected" : ""}>${escapeHtml(lbl)}</option>`;
+        })
+        .join("");
+      el.innerHTML = `<option value="">— None —</option>` + opts;
+      el.value = selectedId || "";
+    }
+
+    function renderNoteSwatches() {
+      const el = document.getElementById("noteSwatches");
+      el.innerHTML = "";
+      NOTE_COLORS.forEach((c) => {
+        const s = document.createElement("div");
+        s.className = "swatch" + (c === noteColorSel ? " selected" : "");
+        s.style.background = c;
+        if (c === "#ffffff") s.style.borderColor = "#ccc";
+        s.addEventListener("click", () => {
+          noteColorSel = c;
+          renderNoteSwatches();
+        });
+        el.appendChild(s);
+      });
+    }
+
+    function openNoteModal(id) {
+      editingNoteId = id || null;
+      const n = id ? notes.find((x) => x.id === id) : null;
+      document.getElementById("noteModalTitle").textContent = n ? "Edit note" : "Add note";
+      document.getElementById("noteTitleInput").value = n ? n.title || "" : "";
+      document.getElementById("noteBodyInput").value = n ? n.body || "" : "";
+      populateNoteTaskSelect(n ? n.taskId || "" : "");
+      document.getElementById("notePinInput").checked = n ? !!n.pinned : false;
+      noteColorSel = n ? n.color || "#ffffff" : "#ffffff";
+      renderNoteSwatches();
+      document.getElementById("noteDelete").classList.toggle("hidden", !n);
+      noteOverlay.classList.remove("hidden");
+      setTimeout(() => document.getElementById("noteTitleInput").focus(), 50);
+    }
+    function closeNoteModal() {
+      noteOverlay.classList.add("hidden");
+      editingNoteId = null;
+    }
+    function saveNote() {
+      const title = document.getElementById("noteTitleInput").value.trim();
+      const body = document.getElementById("noteBodyInput").value.trim();
+      const pinned = document.getElementById("notePinInput").checked;
+      const taskId = document.getElementById("noteTaskSelect").value;
+      if (!title && !body) { closeNoteModal(); return; } // empty note discarded
+      if (editingNoteId) {
+        const n = notes.find((x) => x.id === editingNoteId);
+        Object.assign(n, { title, body, color: noteColorSel, pinned, taskId, updatedAt: new Date().toISOString() });
+      } else {
+        notes.push({ id: uid(), title, body, color: noteColorSel, pinned, taskId, updatedAt: new Date().toISOString() });
+      }
+      saveNotes();
+      closeNoteModal();
+      renderNotes();
+    }
+    function deleteNote() {
+      if (!editingNoteId) return;
+      if (confirm("Delete this note?")) {
+        notes = notes.filter((x) => x.id !== editingNoteId);
+        saveNotes();
+        closeNoteModal();
+        renderNotes();
+      }
+    }
+
+    document.getElementById("notesNav").addEventListener("click", (e) => {
+      if (e.target.id === "addNotesBtn") return;
+      selectView("notes");
+    });
+    document.getElementById("addNotesBtn").addEventListener("click", (e) => {
+      e.stopPropagation();
+      selectView("notes");
+      openNoteModal(null);
+    });
+    document.getElementById("takeNote").addEventListener("click", () => openNoteModal(null));
+    document.getElementById("noteSave").addEventListener("click", saveNote);
+    document.getElementById("noteCancel").addEventListener("click", closeNoteModal);
+    document.getElementById("noteDelete").addEventListener("click", deleteNote);
+    noteOverlay.addEventListener("click", (e) => { if (e.target === noteOverlay) closeNoteModal(); });
+    document.addEventListener("keydown", (e) => {
+      if (noteOverlay.classList.contains("hidden")) return;
+      if (e.key === "Escape") closeNoteModal();
+      if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) saveNote();
+    });
+
+    /* ============================================================
+       Timelines (project-wise Gantt)
+       ============================================================ */
+    function loadTimelines() {
+      try { const r = localStorage.getItem(TIMELINES_KEY); if (r) return JSON.parse(r); } catch (e) {}
+      return [];
+    }
+    function saveTimelines() {
+      try { localStorage.setItem(TIMELINES_KEY, JSON.stringify(timelines)); } catch (e) {}
+    }
+
+    function renderTimelinesSidebar() {
+      const el = document.getElementById("timelineList");
+      if (!el) return;
+      el.innerHTML = "";
+      if (!timelines.length) {
+        el.innerHTML = `<div class="project-empty">No timelines yet. Click + to add one.</div>`;
+        return;
+      }
+      timelines.forEach((tl) => {
+        const p = projectById(tl.projectId);
+        const dot = p ? paletteAt(p.colorIdx).dot : "#9aa0a6";
+        const row = document.createElement("button");
+        row.className = "project-item" + (currentView === "timelines" && currentTimelineId === tl.id ? " active" : "");
+        row.innerHTML = `
+          <span class="project-dot" style="background:${dot}"></span>
+          <span class="project-name">${escapeHtml(tl.name)}</span>
+          <span class="project-more" title="Timeline options">⋯</span>`;
+        row.addEventListener("click", (e) => {
+          if (e.target.classList.contains("project-more")) {
+            e.stopPropagation();
+            openTimelineModal(tl.id);
+          } else {
+            selectView("timelines", tl.id);
+          }
+        });
+        el.appendChild(row);
+      });
+    }
+
+    function renderTimelineView() {
+      const body = document.getElementById("timelineBody");
+      const actions = document.getElementById("timelineActions");
+      const titleEl = document.getElementById("timelineTitle");
+      const pillEl = document.getElementById("timelineProjectPill");
+      if (!body) return;
+      body.innerHTML = "";
+      actions.innerHTML = "";
+      pillEl.innerHTML = "";
+
+      if (!timelines.length) {
+        titleEl.textContent = "Timelines";
+        body.innerHTML = `<div class="tl-empty">No timelines yet.<br>Create a project Gantt chart to plan work over time.</div>`;
+        const add = document.createElement("button");
+        add.className = "btn-primary";
+        add.textContent = "＋ Add timeline";
+        add.onclick = () => openTimelineModal(null);
+        actions.appendChild(add);
+        return;
+      }
+
+      let tl = timelines.find((x) => x.id === currentTimelineId) || timelines[0];
+      currentTimelineId = tl.id;
+      titleEl.textContent = tl.name;
+      const p = projectById(tl.projectId);
+      if (p) pillEl.innerHTML = pillHTML(p.name, paletteAt(p.colorIdx));
+
+      const addBar = document.createElement("button");
+      addBar.className = "btn-primary";
+      addBar.textContent = "＋ Add task";
+      addBar.onclick = () => openBarModal(tl.id, null);
+      actions.appendChild(addBar);
+
+      const edit = document.createElement("button");
+      edit.className = "btn-secondary";
+      edit.textContent = "Edit";
+      edit.onclick = () => openTimelineModal(tl.id);
+      actions.appendChild(edit);
+
+      body.appendChild(buildGantt(tl));
+    }
+
+    function buildGantt(tl) {
+      const bars = (tl.bars || [])
+        .filter((b) => b.start && b.end)
+        .slice()
+        .sort((a, b) => a.start.localeCompare(b.start));
+
+      const wrap = document.createElement("div");
+      wrap.className = "gantt-wrap";
+      if (!bars.length) {
+        wrap.style.border = "none";
+        wrap.innerHTML = `<div class="tl-empty">No tasks in this timeline yet.<br>Click “＋ Add task” to add the first Gantt bar.</div>`;
+        return wrap;
+      }
+
+      const dayMs = 86400000;
+      const dayW = 34, rowH = 40;
+      const minISO = bars.reduce((m, b) => (b.start < m ? b.start : m), bars[0].start);
+      const maxISO = bars.reduce((m, b) => (b.end > m ? b.end : m), bars[0].end);
+      const start = fromISODate(minISO); start.setDate(start.getDate() - 1);
+      const end = fromISODate(maxISO); end.setDate(end.getDate() + 1);
+      const totalDays = Math.round((startOfDay(end) - startOfDay(start)) / dayMs) + 1;
+      const todayISO = toISODate(startOfDay(new Date()));
+      const DOW = ["S", "M", "T", "W", "T", "F", "S"];
+
+      // Left column (task labels)
+      const left = document.createElement("div");
+      left.className = "gantt-left";
+      const corner = document.createElement("div");
+      corner.className = "gantt-corner";
+      corner.textContent = "Task";
+      left.appendChild(corner);
+      const leftInner = document.createElement("div");
+      bars.forEach((b) => {
+        const rl = document.createElement("div");
+        rl.className = "gantt-rowlabel";
+        rl.textContent = b.label;
+        rl.title = b.label;
+        rl.onclick = () => openBarModal(tl.id, b.id);
+        leftInner.appendChild(rl);
+      });
+      left.appendChild(leftInner);
+      wrap.appendChild(left);
+
+      // Right (scrollable chart)
+      const right = document.createElement("div");
+      right.className = "gantt-right";
+      const canvas = document.createElement("div");
+      canvas.className = "gantt-canvas";
+      canvas.style.width = totalDays * dayW + "px";
+
+      const headwrap = document.createElement("div");
+      headwrap.className = "gantt-headwrap";
+      const monthsRow = document.createElement("div");
+      monthsRow.className = "gantt-months";
+      const daysRow = document.createElement("div");
+      daysRow.className = "gantt-days";
+      const segs = [];
+      for (let i = 0; i < totalDays; i++) {
+        const d = new Date(start); d.setDate(d.getDate() + i);
+        const iso = toISODate(d);
+        const wd = d.getDay();
+        const day = document.createElement("div");
+        day.className = "gantt-day" + (wd === 0 || wd === 6 ? " weekend" : "") + (iso === todayISO ? " today" : "");
+        day.style.width = dayW + "px";
+        day.innerHTML = `<span>${DOW[wd]}</span><span>${d.getDate()}</span>`;
+        daysRow.appendChild(day);
+        const lbl = `${MONTHS[d.getMonth()]} ${d.getFullYear()}`;
+        if (segs.length && segs[segs.length - 1].label === lbl) segs[segs.length - 1].days++;
+        else segs.push({ label: lbl, days: 1 });
+      }
+      segs.forEach((s) => {
+        const mc = document.createElement("div");
+        mc.className = "gantt-month";
+        mc.style.width = s.days * dayW + "px";
+        mc.textContent = s.label;
+        monthsRow.appendChild(mc);
+      });
+      headwrap.appendChild(monthsRow);
+      headwrap.appendChild(daysRow);
+      canvas.appendChild(headwrap);
+
+      // Rows + bars
+      const rows = document.createElement("div");
+      rows.className = "gantt-rows";
+      rows.style.height = bars.length * rowH + "px";
+      bars.forEach(() => {
+        const gr = document.createElement("div");
+        gr.className = "gantt-gridrow";
+        rows.appendChild(gr);
+      });
+      const todayOffset = Math.round((startOfDay(fromISODate(todayISO)) - startOfDay(start)) / dayMs);
+      if (todayOffset >= 0 && todayOffset < totalDays) {
+        const tline = document.createElement("div");
+        tline.className = "gantt-today-line";
+        tline.style.left = todayOffset * dayW + dayW / 2 + "px";
+        rows.appendChild(tline);
+      }
+      bars.forEach((b, i) => {
+        const s = startOfDay(fromISODate(b.start));
+        const e = startOfDay(fromISODate(b.end));
+        const offset = Math.round((s - startOfDay(start)) / dayMs);
+        const dur = Math.max(1, Math.round((e - s) / dayMs) + 1);
+        const prog = Math.max(0, Math.min(100, b.progress || 0));
+        const bar = document.createElement("div");
+        bar.className = "gantt-bar";
+        bar.style.left = offset * dayW + 3 + "px";
+        bar.style.width = dur * dayW - 6 + "px";
+        bar.style.top = i * rowH + 7 + "px";
+        bar.style.background = b.color || "#6b5ecb";
+        bar.innerHTML = `<span class="bar-progress" style="width:${prog}%"></span><span class="bar-label">${escapeHtml(b.label)} · ${prog}%</span>`;
+        bar.title = `${b.label}\n${fmtShortDate(b.start)} → ${fmtShortDate(b.end)} · ${prog}%`;
+        bar.onclick = () => openBarModal(tl.id, b.id);
+        rows.appendChild(bar);
+      });
+      canvas.appendChild(rows);
+      right.appendChild(canvas);
+      wrap.appendChild(right);
+
+      // Keep the left labels vertically aligned with the scrolling chart.
+      right.addEventListener("scroll", () => {
+        leftInner.style.transform = `translateY(${-right.scrollTop}px)`;
+      });
+
+      return wrap;
+    }
+
+    /* ---------- Timeline modal ---------- */
+    let editingTimelineId = null;
+    const timelineOverlay = document.getElementById("timelineModalOverlay");
+    function populateTimelineProjectSelect(sel) {
+      const el = document.getElementById("timelineProjectSelect");
+      el.innerHTML =
+        `<option value="">No project</option>` +
+        projects.map((p) => `<option value="${p.id}"${p.id === sel ? " selected" : ""}>${escapeHtml(p.name)}</option>`).join("");
+      el.value = sel || "";
+    }
+    function openTimelineModal(id) {
+      editingTimelineId = id || null;
+      const tl = id ? timelines.find((x) => x.id === id) : null;
+      document.getElementById("timelineModalTitle").textContent = tl ? "Edit timeline" : "Add timeline";
+      document.getElementById("timelineNameInput").value = tl ? tl.name : "";
+      populateTimelineProjectSelect(tl ? tl.projectId : currentProjectId || "");
+      document.getElementById("timelineDelete").classList.toggle("hidden", !tl);
+      timelineOverlay.classList.remove("hidden");
+      setTimeout(() => document.getElementById("timelineNameInput").focus(), 50);
+    }
+    function closeTimelineModal() {
+      timelineOverlay.classList.add("hidden");
+      editingTimelineId = null;
+    }
+    function saveTimeline() {
+      const name = document.getElementById("timelineNameInput").value.trim();
+      const projectId = document.getElementById("timelineProjectSelect").value;
+      if (!name) { document.getElementById("timelineNameInput").focus(); return; }
+      if (editingTimelineId) {
+        const tl = timelines.find((x) => x.id === editingTimelineId);
+        tl.name = name;
+        tl.projectId = projectId;
+        saveTimelines();
+        closeTimelineModal();
+        renderTimelinesSidebar();
+        if (currentView === "timelines") renderTimelineView();
+      } else {
+        const nt = { id: uid(), name, projectId, bars: [] };
+        timelines.push(nt);
+        saveTimelines();
+        closeTimelineModal();
+        selectView("timelines", nt.id);
+      }
+    }
+    function deleteTimeline() {
+      if (!editingTimelineId) return;
+      if (!confirm("Delete this timeline and all its Gantt bars?")) return;
+      const wasCur = currentTimelineId === editingTimelineId;
+      timelines = timelines.filter((x) => x.id !== editingTimelineId);
+      if (wasCur) currentTimelineId = timelines[0] ? timelines[0].id : null;
+      saveTimelines();
+      closeTimelineModal();
+      renderTimelinesSidebar();
+      if (currentView === "timelines") renderTimelineView();
+    }
+
+    document.getElementById("timelinesNav").addEventListener("click", (e) => {
+      if (e.target.id === "addTimelinesBtn") return;
+      selectView("timelines");
+    });
+    document.getElementById("addTimelinesBtn").addEventListener("click", (e) => {
+      e.stopPropagation();
+      openTimelineModal(null);
+    });
+    document.getElementById("timelineSave").addEventListener("click", saveTimeline);
+    document.getElementById("timelineCancel").addEventListener("click", closeTimelineModal);
+    document.getElementById("timelineDelete").addEventListener("click", deleteTimeline);
+    timelineOverlay.addEventListener("click", (e) => { if (e.target === timelineOverlay) closeTimelineModal(); });
+    document.addEventListener("keydown", (e) => {
+      if (timelineOverlay.classList.contains("hidden")) return;
+      if (e.key === "Escape") closeTimelineModal();
+      if (e.key === "Enter") saveTimeline();
+    });
+
+    /* ---------- Gantt bar modal ---------- */
+    let editingBarTL = null, editingBarId = null, barColorSel = "#6b5ecb";
+    const barOverlay = document.getElementById("barModalOverlay");
+    function renderBarSwatches() {
+      const el = document.getElementById("barSwatches");
+      el.innerHTML = "";
+      BAR_COLORS.forEach((c) => {
+        const s = document.createElement("div");
+        s.className = "swatch" + (c === barColorSel ? " selected" : "");
+        s.style.background = c;
+        s.addEventListener("click", () => { barColorSel = c; renderBarSwatches(); });
+        el.appendChild(s);
+      });
+    }
+    function openBarModal(tlId, barId) {
+      editingBarTL = tlId;
+      editingBarId = barId || null;
+      const tl = timelines.find((x) => x.id === tlId);
+      const b = barId ? (tl.bars || []).find((x) => x.id === barId) : null;
+      document.getElementById("barModalTitle").textContent = b ? "Edit task" : "Add task";
+      document.getElementById("barLabelInput").value = b ? b.label : "";
+      document.getElementById("barStartInput").value = b ? b.start : toISODate(new Date());
+      document.getElementById("barEndInput").value = b ? b.end : addDaysISO(3);
+      const prog = b ? b.progress || 0 : 0;
+      document.getElementById("barProgressInput").value = prog;
+      document.getElementById("barProgressVal").textContent = prog;
+      barColorSel = b ? b.color || "#6b5ecb" : "#6b5ecb";
+      renderBarSwatches();
+      document.getElementById("barDelete").classList.toggle("hidden", !b);
+      barOverlay.classList.remove("hidden");
+      setTimeout(() => document.getElementById("barLabelInput").focus(), 50);
+    }
+    function closeBarModal() {
+      barOverlay.classList.add("hidden");
+      editingBarTL = null;
+      editingBarId = null;
+    }
+    function saveBar() {
+      const label = document.getElementById("barLabelInput").value.trim();
+      let start = document.getElementById("barStartInput").value;
+      let end = document.getElementById("barEndInput").value;
+      const progress = parseInt(document.getElementById("barProgressInput").value, 10) || 0;
+      if (!label) { document.getElementById("barLabelInput").focus(); return; }
+      if (!start || !end) { alert("Please set both a start and end date."); return; }
+      if (end < start) { const tmp = start; start = end; end = tmp; }
+      const tl = timelines.find((x) => x.id === editingBarTL);
+      if (!tl) { closeBarModal(); return; }
+      if (!tl.bars) tl.bars = [];
+      if (editingBarId) {
+        const b = tl.bars.find((x) => x.id === editingBarId);
+        Object.assign(b, { label, start, end, progress, color: barColorSel });
+      } else {
+        tl.bars.push({ id: uid(), label, start, end, progress, color: barColorSel });
+      }
+      saveTimelines();
+      closeBarModal();
+      renderTimelineView();
+    }
+    function deleteBar() {
+      if (!editingBarTL || !editingBarId) return;
+      const tl = timelines.find((x) => x.id === editingBarTL);
+      if (tl) {
+        tl.bars = (tl.bars || []).filter((x) => x.id !== editingBarId);
+        saveTimelines();
+      }
+      closeBarModal();
+      renderTimelineView();
+    }
+    document.getElementById("barProgressInput").addEventListener("input", (e) => {
+      document.getElementById("barProgressVal").textContent = e.target.value;
+    });
+    document.getElementById("barSave").addEventListener("click", saveBar);
+    document.getElementById("barCancel").addEventListener("click", closeBarModal);
+    document.getElementById("barDelete").addEventListener("click", deleteBar);
+    barOverlay.addEventListener("click", (e) => { if (e.target === barOverlay) closeBarModal(); });
+    document.addEventListener("keydown", (e) => {
+      if (barOverlay.classList.contains("hidden")) return;
+      if (e.key === "Escape") closeBarModal();
+      if (e.key === "Enter" && e.target.type !== "range") saveBar();
+    });
 
     /* ---------- Go ---------- */
     render();
