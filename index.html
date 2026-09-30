@@ -189,6 +189,7 @@
       align-items: center;
       gap: 20px;
       margin-bottom: 20px;
+      padding-right: 52px; /* clear space for the fixed notification bell */
     }
 
     .view-header h1 {
@@ -297,9 +298,17 @@
       padding: 12px;
     }
 
-    /* .status-column #blockersCard{
-      background-color: #d5aeaa !important;
-    } */
+    /* Highlight the Blockers / Risk column on every status board */
+    .status-column[data-status="blockers"] {
+      background: #fdeceb;
+      box-shadow: inset 0 0 0 1px #f2c4bd;
+    }
+    .status-column[data-status="blockers"] .status-column-header {
+      color: var(--blockers);
+    }
+    .status-column[data-status="blockers"] .empty-hint {
+      color: #c88f88;
+    }
 
     .status-column-header {
       display: flex;
@@ -1320,8 +1329,69 @@
     /* ---------- Timelines (Gantt) ---------- */
     #view-timelines .view-header { justify-content: space-between; flex-wrap: wrap; gap: 12px; }
     .tl-title-wrap { display: flex; align-items: center; gap: 12px; }
-    .timeline-body { flex: 1; display: flex; min-height: 0; }
-    .gantt-wrap { flex: 1; display: flex; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; min-height: 0; }
+    .timeline-body { flex: 1; display: flex; flex-direction: column; gap: 20px; min-height: 0; }
+    .gantt-wrap { flex: 1; display: flex; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; min-height: 200px; }
+
+    /* Key dates table */
+    .kd-section { flex: none; }
+    .kd-head { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+    .kd-head h3 { font-size: 15px; font-weight: 700; }
+    .kd-head .kd-add { padding: 6px 12px; font-size: 13px; }
+    .kd-empty { color: var(--text-muted); font-style: italic; font-size: 13px; padding: 10px 2px; }
+    .kd-wrap { max-height: 240px; overflow-y: auto; border: 1px solid var(--border); border-radius: 10px; }
+    .kd-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .kd-table th {
+      text-align: left; padding: 9px 14px; background: var(--sidebar-bg);
+      font-weight: 600; color: var(--text-muted); border-bottom: 1px solid var(--border);
+      position: sticky; top: 0; white-space: nowrap;
+    }
+    .kd-table td { padding: 9px 14px; border-bottom: 1px solid var(--border); }
+    .kd-table tr:last-child td { border-bottom: none; }
+    .kd-table tbody tr { cursor: pointer; }
+    .kd-table tbody tr:hover td { background: #faf9f8; }
+    .kd-table tr.is-ms td { font-weight: 500; }
+    .kd-table tr.kd-soon td { background: #fdeceb; }
+    .kd-table tr.kd-soon:hover td { background: #fbe0dd; }
+    .kd-ms { display: inline-flex; align-items: center; gap: 5px; color: var(--blockers); font-weight: 700; }
+    .kd-ms svg { flex: none; }
+    .kd-no { color: var(--text-muted); }
+    .kd-actions { text-align: right; width: 40px; }
+    .kd-actions svg { display: inline-block; color: var(--text-muted); }
+
+    /* Notification bell */
+    .bell-wrap { position: fixed; top: 14px; right: 22px; z-index: 90; }
+    .bell-btn {
+      position: relative; background: #fff; border: 1px solid var(--border);
+      border-radius: 50%; width: 40px; height: 40px; cursor: pointer;
+      display: inline-flex; align-items: center; justify-content: center;
+      color: var(--text); box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    }
+    .bell-btn:hover { background: var(--hover); }
+    .bell-btn svg { display: block; }
+    .bell-badge {
+      position: absolute; top: -4px; right: -4px; background: var(--red); color: #fff;
+      font-size: 10px; font-weight: 700; min-width: 17px; height: 17px; border-radius: 9px;
+      display: flex; align-items: center; justify-content: center; padding: 0 4px;
+    }
+    .bell-badge.hidden { display: none; }
+    .bell-dropdown {
+      position: absolute; top: 48px; right: 0; width: 330px; max-height: 70vh; overflow-y: auto;
+      background: #fff; border: 1px solid var(--border); border-radius: 12px;
+      box-shadow: 0 12px 44px rgba(0, 0, 0, 0.22); z-index: 91;
+    }
+    .bell-dropdown.hidden { display: none; }
+    .bell-header { padding: 12px 14px; font-weight: 700; font-size: 14px; border-bottom: 1px solid var(--border); }
+    .bell-list { padding: 6px; }
+    .bell-empty { padding: 26px 14px; text-align: center; color: var(--text-muted); font-size: 13px; }
+    .bell-item { display: flex; align-items: flex-start; gap: 8px; padding: 10px; border-radius: 8px; }
+    .bell-item:hover { background: var(--hover); }
+    .bell-item.overdue { background: #fdeceb; }
+    .bell-item-main { flex: 1; cursor: pointer; min-width: 0; }
+    .bell-item-title { font-weight: 600; font-size: 13px; display: flex; align-items: center; gap: 5px; }
+    .bell-item-title svg { flex: none; }
+    .bell-item-sub { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+    .bell-dismiss { border: none; background: none; cursor: pointer; color: var(--text-muted); font-size: 16px; line-height: 1; padding: 2px 7px; border-radius: 6px; flex: none; }
+    .bell-dismiss:hover { background: rgba(0, 0, 0, 0.08); color: var(--text); }
     .gantt-left { flex: none; width: 190px; border-right: 1px solid var(--border); overflow: hidden; background: var(--sidebar-bg); }
     .gantt-corner {
       height: 48px; display: flex; align-items: center; padding: 0 12px;
@@ -1583,6 +1653,40 @@
     </main>
   </div>
 
+  <!-- Notification bell (fixed, on every view) -->
+  <div class="bell-wrap" id="bellWrap">
+    <button class="bell-btn" id="bellBtn" title="Milestone alerts">
+      <span id="bellIcon"></span>
+      <span class="bell-badge hidden" id="bellBadge">0</span>
+    </button>
+    <div class="bell-dropdown hidden" id="bellDropdown">
+      <div class="bell-header">Milestone alerts</div>
+      <div class="bell-list" id="bellList"></div>
+    </div>
+  </div>
+
+  <!-- Key date modal -->
+  <div class="modal-overlay hidden" id="keyDateModalOverlay">
+    <div class="modal" style="width: 460px">
+      <h2 id="keyDateModalTitle">Add key date</h2>
+      <label>Activity
+        <input type="text" id="kdActivityInput" placeholder="e.g. UAT sign-off" autocomplete="off" />
+      </label>
+      <label>Key date
+        <input type="date" id="kdDateInput" />
+      </label>
+      <label style="flex-direction: row; align-items: center; gap: 8px; font-weight: 500">
+        <input type="checkbox" id="kdMilestoneInput" style="width: auto" /> This is a milestone (alert me 2 days before)
+      </label>
+      <div class="modal-actions">
+        <button class="btn-danger hidden" id="kdDelete">Delete</button>
+        <span style="flex: 1"></span>
+        <button class="btn-secondary" id="kdCancel">Cancel</button>
+        <button class="btn-primary" id="kdSave">Save</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Task modal -->
   <div class="modal-overlay hidden" id="modalOverlay">
     <div class="modal">
@@ -1764,6 +1868,7 @@
     const PROJECTS_KEY = "taskTracker.projects.v1";
     const NOTES_KEY = "taskTracker.notes.v1";
     const TIMELINES_KEY = "taskTracker.timelines.v1";
+    const DISMISSED_KEY = "taskTracker.dismissedAlerts.v1";
 
     // Google Keep-style pastel note colors.
     const NOTE_COLORS = ["#ffffff", "#f8bbd0", "#fdd8a5", "#fff3a3", "#d7f0b8", "#b3ebe0", "#c5e3f7", "#d0d4f7", "#e5c9f2", "#f2d3c0"];
@@ -1835,6 +1940,7 @@
       pencil: ICN(_pencil, 18),
       image: ICN(_image, 18),
       link: ICN('<path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/>', 12),
+      bell: ICN('<path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/>', 20),
     };
 
     const STATUSES = [
@@ -1965,6 +2071,7 @@
     let currentTimelineId = null;
     let notes = loadNotes();
     let timelines = loadTimelines();
+    let dismissedAlerts = loadDismissed();
     let orderSeq = 0; // monotonic counter for manual within-priority ordering
     const reportFilters = { month: "", tag: "", action: "" };
 
@@ -2209,13 +2316,14 @@
       else if (currentView === "timelines") step("timelineView", renderTimelineView);
       step("reporting", renderReporting);
       step("counts", renderCounts);
+      step("bell", renderBell);
       save();
     }
 
     // Append a task card, skipping (not crashing on) any single bad record.
-    function appendCard(list, t, showDate) {
+    function appendCard(list, t, showDate, showStatus) {
       try {
-        list.appendChild(taskCard(t, showDate));
+        list.appendChild(taskCard(t, showDate, showStatus));
       } catch (e) {
         console.warn("[tracku] skipped a task that failed to render:", t && t.id, e);
       }
@@ -2433,7 +2541,7 @@
           hint.textContent = "Drop tasks here";
           list.appendChild(hint);
         }
-        colTasks.forEach((t) => appendCard(list, t, true));
+        colTasks.forEach((t) => appendCard(list, t, true, true));
         enableDrop(list, { priority: pr.key });
         col.appendChild(list);
 
@@ -2733,7 +2841,7 @@
     }
 
     /* ---------- Task card ---------- */
-    function taskCard(t, showDate = false) {
+    function taskCard(t, showDate = false, showStatus = false) {
       const card = document.createElement("div");
       card.className =
         "task-card" + (t.status === "completed" ? " done" : "");
@@ -2804,7 +2912,7 @@
           meta.appendChild(badge);
         }
       }
-      if (!showDate) {
+      if ((!showDate || showStatus) && STATUS_MAP[t.status]) {
         const st = STATUS_MAP[t.status];
         const pill = document.createElement("span");
         pill.className = "task-status-pill";
@@ -3970,7 +4078,65 @@
       edit.onclick = () => openTimelineModal(tl.id);
       actions.appendChild(edit);
 
+      body.appendChild(buildKeyDates(tl));
       body.appendChild(buildGantt(tl));
+    }
+
+    /* ---------- Key dates table ---------- */
+    function buildKeyDates(tl) {
+      const today = startOfDay(new Date());
+      const sec = document.createElement("div");
+      sec.className = "kd-section";
+
+      const head = document.createElement("div");
+      head.className = "kd-head";
+      const h = document.createElement("h3");
+      h.textContent = "Key dates";
+      const addBtn = document.createElement("button");
+      addBtn.className = "btn-secondary kd-add";
+      addBtn.textContent = "＋ Add key date";
+      addBtn.onclick = () => openKeyDateModal(tl.id, null);
+      head.appendChild(h);
+      head.appendChild(addBtn);
+      sec.appendChild(head);
+
+      const kds = (tl.keyDates || []).slice().sort((a, b) => (a.date || "").localeCompare(b.date || ""));
+      if (!kds.length) {
+        const empty = document.createElement("div");
+        empty.className = "kd-empty";
+        empty.textContent = "No key dates yet. Add activities with their target dates; flag the important ones as milestones to get a bell alert 2 days before.";
+        sec.appendChild(empty);
+        return sec;
+      }
+
+      const wrap = document.createElement("div");
+      wrap.className = "kd-wrap";
+      const table = document.createElement("table");
+      table.className = "kd-table";
+      let html = `<thead><tr><th>Activity</th><th>Key date</th><th>Milestone</th><th></th></tr></thead><tbody>`;
+      kds.forEach((kd) => {
+        const d = fromISODate(kd.date);
+        const dateStr = d ? `${d.getDate()} ${MONTHS[d.getMonth()].slice(0, 3)} ${d.getFullYear()}` : "—";
+        const daysUntil = d ? Math.round((startOfDay(d) - today) / 86400000) : null;
+        const soon = kd.milestone && daysUntil !== null && daysUntil <= 2;
+        const ms = kd.milestone
+          ? `<span class="kd-ms">${priorityFlag("p1")} Yes</span>`
+          : `<span class="kd-no">No</span>`;
+        html += `<tr class="${kd.milestone ? "is-ms" : ""}${soon ? " kd-soon" : ""}" data-kd="${kd.id}">
+          <td>${escapeHtml(kd.activity)}</td>
+          <td>${dateStr}</td>
+          <td>${ms}</td>
+          <td class="kd-actions">${ICONS.pencil}</td>
+        </tr>`;
+      });
+      html += `</tbody>`;
+      table.innerHTML = html;
+      table.querySelectorAll("tr[data-kd]").forEach((tr) => {
+        tr.addEventListener("click", () => openKeyDateModal(tl.id, tr.dataset.kd));
+      });
+      wrap.appendChild(table);
+      sec.appendChild(wrap);
+      return sec;
     }
 
     function buildGantt(tl) {
@@ -4136,7 +4302,7 @@
         renderTimelinesSidebar();
         if (currentView === "timelines") renderTimelineView();
       } else {
-        const nt = { id: uid(), name, projectId, bars: [] };
+        const nt = { id: uid(), name, projectId, bars: [], keyDates: [] };
         timelines.push(nt);
         saveTimelines();
         closeTimelineModal();
@@ -4253,6 +4419,154 @@
       if (e.key === "Escape") closeBarModal();
       if (e.key === "Enter" && e.target.type !== "range") saveBar();
     });
+
+    /* ============================================================
+       Key dates + milestone alerts (bell)
+       ============================================================ */
+    function loadDismissed() {
+      try { const r = localStorage.getItem(DISMISSED_KEY); if (r) return JSON.parse(r); } catch (e) {}
+      return [];
+    }
+    function saveDismissed() {
+      try { localStorage.setItem(DISMISSED_KEY, JSON.stringify(dismissedAlerts)); } catch (e) {}
+    }
+
+    /* ---------- Key date modal ---------- */
+    let editingKdTL = null, editingKdId = null;
+    const kdOverlay = document.getElementById("keyDateModalOverlay");
+    function openKeyDateModal(tlId, kdId) {
+      editingKdTL = tlId;
+      editingKdId = kdId || null;
+      const tl = timelines.find((x) => x.id === tlId);
+      const kd = kdId ? (tl.keyDates || []).find((x) => x.id === kdId) : null;
+      document.getElementById("keyDateModalTitle").textContent = kd ? "Edit key date" : "Add key date";
+      document.getElementById("kdActivityInput").value = kd ? kd.activity : "";
+      document.getElementById("kdDateInput").value = kd ? kd.date : toISODate(new Date());
+      document.getElementById("kdMilestoneInput").checked = kd ? !!kd.milestone : false;
+      document.getElementById("kdDelete").classList.toggle("hidden", !kd);
+      kdOverlay.classList.remove("hidden");
+      setTimeout(() => document.getElementById("kdActivityInput").focus(), 50);
+    }
+    function closeKeyDateModal() {
+      kdOverlay.classList.add("hidden");
+      editingKdTL = null;
+      editingKdId = null;
+    }
+    function saveKeyDate() {
+      const activity = document.getElementById("kdActivityInput").value.trim();
+      const date = document.getElementById("kdDateInput").value;
+      const milestone = document.getElementById("kdMilestoneInput").checked;
+      if (!activity) { document.getElementById("kdActivityInput").focus(); return; }
+      if (!date) { alert("Please pick a key date."); return; }
+      const tl = timelines.find((x) => x.id === editingKdTL);
+      if (!tl) { closeKeyDateModal(); return; }
+      if (!tl.keyDates) tl.keyDates = [];
+      if (editingKdId) {
+        const kd = tl.keyDates.find((x) => x.id === editingKdId);
+        Object.assign(kd, { activity, date, milestone });
+      } else {
+        tl.keyDates.push({ id: uid(), activity, date, milestone });
+      }
+      saveTimelines();
+      closeKeyDateModal();
+      renderTimelineView();
+      renderBell();
+    }
+    function deleteKeyDate() {
+      if (!editingKdTL || !editingKdId) return;
+      const tl = timelines.find((x) => x.id === editingKdTL);
+      if (tl) {
+        tl.keyDates = (tl.keyDates || []).filter((x) => x.id !== editingKdId);
+        saveTimelines();
+      }
+      closeKeyDateModal();
+      renderTimelineView();
+      renderBell();
+    }
+    document.getElementById("kdSave").addEventListener("click", saveKeyDate);
+    document.getElementById("kdCancel").addEventListener("click", closeKeyDateModal);
+    document.getElementById("kdDelete").addEventListener("click", deleteKeyDate);
+    kdOverlay.addEventListener("click", (e) => { if (e.target === kdOverlay) closeKeyDateModal(); });
+    document.addEventListener("keydown", (e) => {
+      if (kdOverlay.classList.contains("hidden")) return;
+      if (e.key === "Escape") closeKeyDateModal();
+      if (e.key === "Enter") saveKeyDate();
+    });
+
+    /* ---------- Milestone alerts + bell ---------- */
+    // A milestone due within 2 days (or overdue) raises a dismissible alert.
+    function computeAlerts() {
+      const today = startOfDay(new Date());
+      const alerts = [];
+      timelines.forEach((tl) => {
+        const p = projectById(tl.projectId);
+        (tl.keyDates || []).forEach((kd) => {
+          if (!kd.milestone || !kd.date) return;
+          const d = fromISODate(kd.date);
+          if (!d) return;
+          const daysUntil = Math.round((startOfDay(d) - today) / 86400000);
+          if (daysUntil > 2) return; // only within the next 2 days (or overdue)
+          const key = tl.id + ":" + kd.id;
+          if (dismissedAlerts.includes(key)) return;
+          alerts.push({
+            key, activity: kd.activity, date: kd.date, daysUntil,
+            project: p ? p.name : tl.name, timelineId: tl.id,
+          });
+        });
+      });
+      alerts.sort((a, b) => a.daysUntil - b.daysUntil);
+      return alerts;
+    }
+
+    function renderBell() {
+      const badge = document.getElementById("bellBadge");
+      const list = document.getElementById("bellList");
+      if (!badge || !list) return;
+      const alerts = computeAlerts();
+      badge.textContent = alerts.length;
+      badge.classList.toggle("hidden", alerts.length === 0);
+      if (!alerts.length) {
+        list.innerHTML = `<div class="bell-empty">No milestone alerts.<br>You're all caught up 🎉</div>`;
+        return;
+      }
+      list.innerHTML = "";
+      alerts.forEach((a) => {
+        const when =
+          a.daysUntil < 0 ? `Overdue by ${-a.daysUntil} day${-a.daysUntil !== 1 ? "s" : ""}`
+          : a.daysUntil === 0 ? "Due today"
+          : a.daysUntil === 1 ? "Due tomorrow"
+          : `Due in ${a.daysUntil} days`;
+        const row = document.createElement("div");
+        row.className = "bell-item" + (a.daysUntil < 0 ? " overdue" : "");
+        row.innerHTML = `
+          <div class="bell-item-main">
+            <div class="bell-item-title">${priorityFlag("p1")} ${escapeHtml(a.activity)}</div>
+            <div class="bell-item-sub">${escapeHtml(a.project)} · ${when} · ${fmtShortDate(a.date)}</div>
+          </div>
+          <button class="bell-dismiss" title="Dismiss">✕</button>`;
+        row.querySelector(".bell-dismiss").addEventListener("click", (e) => {
+          e.stopPropagation();
+          dismissedAlerts.push(a.key);
+          saveDismissed();
+          renderBell();
+        });
+        row.querySelector(".bell-item-main").addEventListener("click", () => {
+          document.getElementById("bellDropdown").classList.add("hidden");
+          selectView("timelines", a.timelineId);
+        });
+        list.appendChild(row);
+      });
+    }
+
+    document.getElementById("bellBtn").addEventListener("click", (e) => {
+      e.stopPropagation();
+      document.getElementById("bellDropdown").classList.toggle("hidden");
+    });
+    document.addEventListener("click", (e) => {
+      const w = document.getElementById("bellWrap");
+      if (w && !w.contains(e.target)) document.getElementById("bellDropdown").classList.add("hidden");
+    });
+    document.getElementById("bellIcon").innerHTML = ICONS.bell;
 
     /* ---------- Go ---------- */
     render();
